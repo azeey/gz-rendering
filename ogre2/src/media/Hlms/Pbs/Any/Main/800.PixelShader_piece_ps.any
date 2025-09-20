@@ -698,7 +698,8 @@
 
 			@insertpiece( DoDirectionalShadowMaps )
 
-		@end @property( hlms_use_prepass )
+		@end
+    @property( hlms_use_prepass )
 			@property( hlms_use_prepass_msaa )
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 				//so we need to perform the test ourselves
@@ -818,7 +819,7 @@
 					//Linear to Gamma space
 					outPs_colour0.xyz	= sqrt( finalColour );
 				@else
-					outPs_colour0.xyz	= finalColour;
+					outPs_colour0.xyz	= sqrt( finalColour );
 				@end
 
 				@property( hlms_alphablend || hlms_alpha_to_coverage )

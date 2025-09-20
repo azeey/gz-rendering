@@ -580,7 +580,7 @@ void Ogre2RenderTarget::BuildTargetImpl()
 
     this->dataPtr->ogreTexture[i]->setResolution(this->width, this->height);
     this->dataPtr->ogreTexture[i]->setNumMipmaps(1u);
-    this->dataPtr->ogreTexture[i]->setPixelFormat(Ogre::PFG_RGBA8_UNORM_SRGB);
+    this->dataPtr->ogreTexture[i]->setPixelFormat(Ogre::PFG_RGBA32_FLOAT);
 
     this->dataPtr->ogreTexture[i]->scheduleTransitionTo(
           Ogre::GpuResidency::Resident);
