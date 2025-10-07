@@ -1046,29 +1046,29 @@ namespace gz
       // override transparency / blend setting after setting alpha from texture
       this->SetTransparency(_material->Transparency());
       // override depth check / depth write after setting transparency
-      this->SetDepthCheckEnabled(_material->DepthCheckEnabled());
-      this->SetDepthWriteEnabled(_material->DepthWriteEnabled());
-      this->SetReflectivity(_material->Reflectivity());
-      this->SetCastShadows(_material->CastShadows());
-      this->SetReceiveShadows(_material->ReceiveShadows());
-      this->SetReflectionEnabled(_material->ReflectionEnabled());
-      this->SetTexture(_material->Texture(), _material->TextureData());
-      this->SetNormalMap(_material->NormalMap(), _material->NormalMapData());
-      this->SetRoughnessMap(_material->RoughnessMap(),
-          _material->RoughnessMapData());
-      this->SetMetalnessMap(_material->MetalnessMap(),
-          _material->MetalnessMapData());
-      this->SetRoughness(_material->Roughness());
-      this->SetMetalness(_material->Metalness());
-      this->SetEnvironmentMap(_material->EnvironmentMap(),
-          _material->EnvironmentMapData());
-      this->SetEmissiveMap(_material->EmissiveMap(),
-          _material->EmissiveMapData());
-      this->SetLightMap(_material->LightMap(), _material->LightMapData(),
-          _material->LightMapTexCoordSet());
-      this->SetShaderType(_material->ShaderType());
-      this->SetVertexShader(_material->VertexShader());
-      this->SetFragmentShader(_material->FragmentShader());
+      // this->SetDepthCheckEnabled(_material->DepthCheckEnabled());
+      // this->SetDepthWriteEnabled(_material->DepthWriteEnabled());
+      // this->SetReflectivity(_material->Reflectivity());
+      // this->SetCastShadows(_material->CastShadows());
+      // this->SetReceiveShadows(_material->ReceiveShadows());
+      // this->SetReflectionEnabled(_material->ReflectionEnabled());
+      // this->SetTexture(_material->Texture(), _material->TextureData());
+      // this->SetNormalMap(_material->NormalMap(), _material->NormalMapData());
+      // this->SetRoughnessMap(_material->RoughnessMap(),
+      //     _material->RoughnessMapData());
+      // this->SetMetalnessMap(_material->MetalnessMap(),
+      //     _material->MetalnessMapData());
+      // this->SetRoughness(_material->Roughness());
+      // this->SetMetalness(_material->Metalness());
+      // this->SetEnvironmentMap(_material->EnvironmentMap(),
+      //     _material->EnvironmentMapData());
+      // this->SetEmissiveMap(_material->EmissiveMap(),
+      //     _material->EmissiveMapData());
+      // this->SetLightMap(_material->LightMap(), _material->LightMapData(),
+      //     _material->LightMapTexCoordSet());
+      // this->SetShaderType(_material->ShaderType());
+      // this->SetVertexShader(_material->VertexShader());
+      // this->SetFragmentShader(_material->FragmentShader());
     }
 
     //////////////////////////////////////////////////
@@ -1099,19 +1099,19 @@ namespace gz
       // TODO(anyone): update common::Material
       this->SetShaderType(ST_PIXEL);
 
-      const common::Pbr *pbrMat = _material.PbrMaterial();
-      if (!pbrMat)
-        pbrMat = &kDefaultPbr;
-      this->SetNormalMap(pbrMat->NormalMap(), pbrMat->NormalMapData());
-      this->SetRoughnessMap(pbrMat->RoughnessMap(), pbrMat->RoughnessMapData());
-      this->SetMetalnessMap(pbrMat->MetalnessMap(), pbrMat->MetalnessMapData());
-      this->SetRoughness(pbrMat->Roughness());
-      this->SetMetalness(pbrMat->Metalness());
-      // TODO(anyone): update when pbrMat has EnvironmentMapData API
-      this->SetEnvironmentMap(pbrMat->EnvironmentMap(), nullptr);
-      this->SetEmissiveMap(pbrMat->EmissiveMap(), pbrMat->EmissiveMapData());
-      this->SetLightMap(pbrMat->LightMap(), pbrMat->LightMapData(),
-          pbrMat->LightMapTexCoordSet());
+      // const common::Pbr *pbrMat = _material.PbrMaterial();
+      // if (!pbrMat)
+      //   pbrMat = &kDefaultPbr;
+      // this->SetNormalMap(pbrMat->NormalMap(), pbrMat->NormalMapData());
+      // this->SetRoughnessMap(pbrMat->RoughnessMap(), pbrMat->RoughnessMapData());
+      // this->SetMetalnessMap(pbrMat->MetalnessMap(), pbrMat->MetalnessMapData());
+      // this->SetRoughness(pbrMat->Roughness());
+      // this->SetMetalness(pbrMat->Metalness());
+      // // TODO(anyone): update when pbrMat has EnvironmentMapData API
+      // this->SetEnvironmentMap(pbrMat->EnvironmentMap(), nullptr);
+      // this->SetEmissiveMap(pbrMat->EmissiveMap(), pbrMat->EmissiveMapData());
+      // this->SetLightMap(pbrMat->LightMap(), pbrMat->LightMapData(),
+      //     pbrMat->LightMapTexCoordSet());
     }
 
     //////////////////////////////////////////////////
