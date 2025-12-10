@@ -213,6 +213,11 @@ namespace gz
       protected: virtual ProjectorPtr CreateProjectorImpl(
                      unsigned int _id, const std::string &_name) override;
 
+      // Documentation inherited
+      protected: virtual GlobalIlluminationPtr CreateGlobalIlluminationImpl(
+                     unsigned int _id, const std::string &_name,
+                     const GlobalIlluminationType _type) override;
+
       protected: virtual bool InitObject(OgreObjectPtr _object,
                      unsigned int _id, const std::string &_name);
 

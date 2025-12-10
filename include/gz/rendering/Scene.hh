@@ -35,6 +35,7 @@
 #include "gz/rendering/Storage.hh"
 #include "gz/rendering/Export.hh"
 #include "gz/rendering/Light.hh"
+#include "gz/rendering/GlobalIllumination.hh"
 
 namespace gz
 {
@@ -1232,10 +1233,43 @@ namespace gz
       public: virtual ProjectorPtr CreateProjector(
                   unsigned int _id, const std::string &_name) = 0;
 
+      /// \brief Create new global illumination solution with the given name.
+      /// A unique ID and name will automatically be assigned to the GI.
+      /// \return The created GI
+      public: virtual GlobalIlluminationPtr
+                  CreateGlobalIllumination() = 0;
+
+      /// \brief Create new global illumination solution with the given name.
+      /// A unique name will automatically be assigned to the GI. If the given
+      /// ID is already in use, NULL will be returned.
+      /// \param[in] _id ID of the new particle emitter
+      /// \return The created GI
+      public: virtual GlobalIlluminationPtr CreateGlobalIllumination(
+                  unsigned int _id) = 0;
+
+      /// \brief Create new global illumination solution with the given name.
+      /// A unique ID will automatically be assigned to the visual. If the given
+      /// name is already in use, NULL will be returned.
+      /// \param[in] _name Name of the new GI solution
+      /// \return The created GI
+      public: virtual GlobalIlluminationPtr CreateGlobalIllumination(
+                  const std::string &_name) = 0;
+
+      /// \brief Create new global illumination solution with the given name.
+      /// If either the given ID or name is already in use, NULL will be
+      /// returned.
+      /// \param[in] _id ID of the new particle emitter
+      /// \param[in] _name Name of the new GI solution
+      /// \param[in] _type The type of GI to create
+      /// \return The created GI
+      public: virtual GlobalIlluminationPtr CreateGlobalIllumination(
+                  unsigned int _id, const std::string &_name,
+                  const GlobalIlluminationType _type) = 0;
+
       /// \brief Create new GI VCT solution with the given name. A unique ID
       /// and name will automatically be assigned to the GI.
       /// \return The created GI VCT
-      public: virtual GlobalIlluminationVctPtr
+       public: GZ_DEPRECATED(8) virtual GlobalIlluminationVctPtr
                   CreateGlobalIlluminationVct() = 0;
 
       /// \brief Create new GI VCT solution with the given name. A unique name
@@ -1243,7 +1277,8 @@ namespace gz
       /// already in use, NULL will be returned.
       /// \param[in] _id ID of the new particle emitter
       /// \return The created GI VCT
-      public: virtual GlobalIlluminationVctPtr CreateGlobalIlluminationVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationVctPtr
+                 CreateGlobalIlluminationVct(
                   unsigned int _id) = 0;
 
       /// \brief Create new GI VCT solution with the given name. A unique ID
@@ -1251,7 +1286,8 @@ namespace gz
       /// already in use, NULL will be returned.
       /// \param[in] _name Name of the new GI VCT solution
       /// \return The created GI VCT
-      public: virtual GlobalIlluminationVctPtr CreateGlobalIlluminationVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationVctPtr
+                  CreateGlobalIlluminationVct(
                   const std::string &_name) = 0;
 
       /// \brief Create new GI VCT solution with the given name. If either the
@@ -1259,13 +1295,14 @@ namespace gz
       /// \param[in] _id ID of the new particle emitter
       /// \param[in] _name Name of the new GI VCT solution
       /// \return The created GI VCT
-      public: virtual GlobalIlluminationVctPtr CreateGlobalIlluminationVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationVctPtr
+                  CreateGlobalIlluminationVct(
                   unsigned int _id, const std::string &_name) = 0;
 
       /// \brief Create new GI CIVCT solution with the given name. A unique ID
       /// and name will automatically be assigned to the GI.
       /// \return The created GI CIVCT
-      public: virtual GlobalIlluminationCiVctPtr
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationCiVctPtr
                   CreateGlobalIlluminationCiVct() = 0;
 
       /// \brief Create new GI CIVCT solution with the given name. A unique name
@@ -1273,7 +1310,8 @@ namespace gz
       /// already in use, NULL will be returned.
       /// \param[in] _id ID of the new particle emitter
       /// \return The created GI CIVCT
-      public: virtual GlobalIlluminationCiVctPtr CreateGlobalIlluminationCiVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationCiVctPtr
+                  CreateGlobalIlluminationCiVct(
                   unsigned int _id) = 0;
 
       /// \brief Create new GI CIVCT solution with the given name. A unique ID
@@ -1281,7 +1319,8 @@ namespace gz
       /// already in use, NULL will be returned.
       /// \param[in] _name Name of the new GI CIVCT solution
       /// \return The created GI CIVCT
-      public: virtual GlobalIlluminationCiVctPtr CreateGlobalIlluminationCiVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationCiVctPtr
+                  CreateGlobalIlluminationCiVct(
                   const std::string &_name) = 0;
 
       /// \brief Create new GI CIVCT solution with the given name. If either the
@@ -1289,7 +1328,8 @@ namespace gz
       /// \param[in] _id ID of the new particle emitter
       /// \param[in] _name Name of the new GI CIVCT solution
       /// \return The created GI CIVCT
-      public: virtual GlobalIlluminationCiVctPtr CreateGlobalIlluminationCiVct(
+      public: GZ_DEPRECATED(8) virtual GlobalIlluminationCiVctPtr
+                  CreateGlobalIlluminationCiVct(
                   unsigned int _id, const std::string &_name) = 0;
 
       /// \brief Enable sky in the scene.

@@ -1,3 +1,4 @@
-add_subdirectory(fonts)
-add_subdirectory(materials)
-add_subdirectory(rtshaderlib150)
+install(
+  DIRECTORY materials
+  DESTINATION ${GZ_RENDERING_OGRE_MEDIA_INSTALL_DIR}
+)

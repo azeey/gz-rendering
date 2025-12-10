@@ -16,6 +16,7 @@
  */
 
 #include "gz/rendering/Scene.hh"
+#include "gz/rendering/GlobalIllumination.hh"
 
 using namespace gz;
 using namespace rendering;
@@ -26,6 +27,87 @@ static std::unordered_map<const Scene *, SceneExt *> g_sceneExtMap;
 
 //////////////////////////////////////////////////
 Scene::~Scene() = default;
+
+//////////////////////////////////////////////////
+GlobalIlluminationPtr Scene::CreateGlobalIllumination()
+{
+  return this->CreateGlobalIllumination(this->Id(), "");
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationPtr Scene::CreateGlobalIllumination(unsigned int _id)
+{
+  return this->CreateGlobalIllumination(_id, "");
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationPtr Scene::CreateGlobalIllumination(const std::string &_name)
+{
+  return this->CreateGlobalIllumination(this->Id(), _name);
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationVctPtr Scene::CreateGlobalIlluminationVct()
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationVct>(
+      this->CreateGlobalIllumination(
+        this->Id(), "", GIT_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationVctPtr Scene::CreateGlobalIlluminationVct(unsigned int _id)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationVct>(
+      this->CreateGlobalIllumination(_id, "", GIT_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationVctPtr Scene::CreateGlobalIlluminationVct(
+    const std::string &_name)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationVct>(
+      this->CreateGlobalIllumination(this->Id(), _name, GIT_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationVctPtr Scene::CreateGlobalIlluminationVct(
+    unsigned int _id, const std::string &_name)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationVct>(
+      this->CreateGlobalIllumination(_id, _name, GIT_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationCiVctPtr Scene::CreateGlobalIlluminationCiVct()
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationCiVct>(
+      this->CreateGlobalIllumination(
+        this->Id(), "", GIT_CI_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationCiVctPtr Scene::CreateGlobalIlluminationCiVct(
+    unsigned int _id)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationCiVct>(
+      this->CreateGlobalIllumination(_id, "", GIT_CI_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationCiVctPtr Scene::CreateGlobalIlluminationCiVct(
+    const std::string &_name)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationCiVct>(
+      this->CreateGlobalIllumination(this->Id(), _name, GIT_CI_VCT));
+}
+
+//////////////////////////////////////////////////
+GlobalIlluminationCiVctPtr Scene::CreateGlobalIlluminationCiVct(
+    unsigned int _id, const std::string &_name)
+{
+  return std::dynamic_pointer_cast<GlobalIlluminationCiVct>(
+      this->CreateGlobalIllumination(_id, _name, GIT_CI_VCT));
+}
 
 //////////////////////////////////////////////////
 SceneExt *Scene::Extension() const
