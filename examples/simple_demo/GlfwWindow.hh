@@ -14,8 +14,8 @@
  * limitations under the License.
  *
  */
-#ifndef GZ_RENDERING_EXAMPLES_SIMPLE_DEMO_GLUTWINDOW_HH_
-#define GZ_RENDERING_EXAMPLES_SIMPLE_DEMO_GLUTWINDOW_HH_
+#ifndef GZ_RENDERING_EXAMPLES_SIMPLE_DEMO_GLFWWINDOW_HH_
+#define GZ_RENDERING_EXAMPLES_SIMPLE_DEMO_GLFWWINDOW_HH_
 
 #include <vector>
 #include "gz/rendering/RenderTypes.hh"

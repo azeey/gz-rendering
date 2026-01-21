@@ -46,6 +46,6 @@ You'll see:
 
 ## Code
 
-The function `updateCameras()` is called each time the `DisplayCB` function runs. Using the method `SetLocalPosition` from the `Camera` class we can move the camera in the world:
+The function `updateCameras()` is called each time the window is updated. Using the method `SetLocalPosition` from the `Camera` class we can move the camera in the world:
 
-\snippet examples/simple_demo/GlutWindow.cc update camera
+\snippet examples/simple_demo/GlfwWindow.cc update camera

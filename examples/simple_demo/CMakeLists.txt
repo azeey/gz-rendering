@@ -3,9 +3,8 @@ project(gz-rendering-simple-demo)
 
 find_package(gz-rendering)
 
-find_package(GLUT REQUIRED)
-include_directories(SYSTEM ${GLUT_INCLUDE_DIRS})
-link_directories(${GLUT_LIBRARY_DIRS})
+find_package(glfw3 REQUIRED)
+include_directories(SYSTEM ${GLFW3_INCLUDE_DIRS})
 
 find_package(OpenGL REQUIRED)
 include_directories(SYSTEM ${OpenGL_INCLUDE_DIRS})
@@ -21,10 +20,10 @@ if(NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif()
 
-add_executable(simple_demo Main.cc GlutWindow.cc)
+add_executable(simple_demo Main.cc GlfwWindow.cc)
 
 target_link_libraries(simple_demo
-  ${GLUT_LIBRARIES}
+  glfw
   ${OPENGL_LIBRARIES}
   ${GLEW_LIBRARIES}
   ${GZ-RENDERING_LIBRARIES}

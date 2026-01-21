@@ -15,24 +15,13 @@
  *
  */
 
-#if defined(__APPLE__)
-  #include <OpenGL/gl.h>
-  #include <GLUT/glut.h>
-#elif not defined(_WIN32)
-  #include <GL/glew.h>
-  #include <GL/gl.h>
-  #include <GL/glut.h>
-#else
-  #include <GL/glut.h>
-#endif
-
 #include <iostream>
 #include <vector>
 
 #include <gz/common/Console.hh>
 #include <gz/rendering.hh>
 
-#include "GlutWindow.hh"
+#include "GlfwWindow.hh"
 
 using namespace gz;
 using namespace rendering;
@@ -210,8 +199,6 @@ CameraPtr createCamera(const std::string &_engineName,
 //////////////////////////////////////////////////
 int main(int _argc, char** _argv)
 {
-  glutInit(&_argc, _argv);
-
   // Expose engine name to command line because we can't instantiate both
   // ogre and ogre2 at the same time
   std::string ogreEngineName("ogre");
