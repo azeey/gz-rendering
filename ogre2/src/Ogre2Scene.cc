@@ -1001,7 +1001,7 @@ void Ogre2Scene::CreateShadowNodeWithSettings(
         {
           Ogre::CompositorTargetDef *targetDef =
               shadowNodeDef->addTargetPass("tmpCubemap", i);
-          targetDef->setNumPasses(2u);
+          targetDef->setNumPasses(1u);
           targetDef->setShadowMapSupportedLightTypes(
               shadowParam.supportedLightTypes & pointMask);
           {
