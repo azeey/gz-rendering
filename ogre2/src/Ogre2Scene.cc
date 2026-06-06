@@ -55,6 +55,7 @@
 #include "gz/rendering/ogre2/Ogre2LightVisual.hh"
 #include "gz/rendering/ogre2/Ogre2LidarVisual.hh"
 #include "gz/rendering/ogre2/Ogre2FrustumVisual.hh"
+#include "gz/rendering/ogre2/Ogre2Fog.hh"
 #include "gz/rendering/ogre2/Ogre2Marker.hh"
 #include "gz/rendering/ogre2/Ogre2Material.hh"
 #include "gz/rendering/ogre2/Ogre2MeshFactory.hh"
@@ -1691,9 +1692,9 @@ Ogre2SceneExt::Ogre2SceneExt(Scene *_scene)
 ObjectPtr Ogre2SceneExt::CreateExt(const std::string &_type,
     const std::string &_name)
 {
+  Ogre2Scene *ogreScene = dynamic_cast<Ogre2Scene *>(this->scene);
   if (_type == "frustum_visual")
   {
-    Ogre2Scene *ogreScene = dynamic_cast<Ogre2Scene *>(this->scene);
     unsigned int objId = ogreScene->CreateObjectId();
     std::string objName = _name;
     if (objName.empty())
@@ -1707,6 +1708,21 @@ ObjectPtr Ogre2SceneExt::CreateExt(const std::string &_type,
         objId, objName);
     bool result = ogreScene->Visuals()->Add(frustumVisual);
     return (result) ? frustumVisual : nullptr;
+  }
+  else if (_type == "fog")
+  {
+    unsigned int objId = ogreScene->CreateObjectId();
+    std::string objName = _name;
+    if (objName.empty())
+    {
+      std::stringstream ss;
+      ss << ogreScene->Name() << "::" <<  "Fog";
+      ss << "(" << std::to_string(objId) << ")";
+      objName = ss.str();
+    }
+    Ogre2FogPtr fog(new Ogre2Fog);
+    bool result = ogreScene->InitObject(fog, objId, objName);
+    return (result) ? fog : nullptr;
   }
 
   return ObjectPtr();

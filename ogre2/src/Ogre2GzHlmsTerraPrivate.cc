@@ -21,6 +21,8 @@
 #include <gz/common/Filesystem.hh>
 #include <gz/common/Util.hh>
 
+#include <OgreSceneManager.h>
+
 #include "Terra/Terra.h"
 
 #ifdef _MSC_VER
@@ -103,6 +105,21 @@ namespace Ogre
         _hlms->_setProperty("gz_render_solid_color_textured", 1);
     }
 
+    if (!_casterPass)
+    {
+      Ogre::FogMode fogMode = _sceneManager->getFogMode();
+      if (fogMode != Ogre::FOG_NONE)
+      {
+        _hlms->_setProperty("gz_fog_enabled", 1);
+        if (fogMode == Ogre::FOG_LINEAR)
+          _hlms->_setProperty("gz_fog_linear", 1);
+        else if (fogMode == Ogre::FOG_EXP)
+          _hlms->_setProperty("gz_fog_exp", 1);
+        else if (fogMode == Ogre::FOG_EXP2)
+          _hlms->_setProperty("gz_fog_exp2", 1);
+      }
+    }
+
     // Allow additional listener-only customizations to inject their stuff
     for (Ogre::HlmsListener *listener : this->customizations)
     {
@@ -117,6 +134,15 @@ namespace Ogre
     bool _dualParaboloid, Ogre::SceneManager *_sceneManager) const
   {
     uint32 bufferSize = 0u;
+
+    if (!_casterPass)
+    {
+      Ogre::FogMode fogMode = _sceneManager->getFogMode();
+      if (fogMode != Ogre::FOG_NONE)
+      {
+        bufferSize += 8 * sizeof(float);
+      }
+    }
 
     // Allow additional listener-only customizations to inject their stuff
     for (Ogre::HlmsListener *listener : this->customizations)
@@ -133,6 +159,26 @@ namespace Ogre
     bool _dualParaboloid, Ogre::SceneManager *_sceneManager,
     float *_passBufferPtr)
   {
+    if (!_casterPass)
+    {
+      Ogre::FogMode fogMode = _sceneManager->getFogMode();
+      if (fogMode != Ogre::FOG_NONE)
+      {
+        // fogParams: [density, start, end, 1 / (end - start)]
+        *_passBufferPtr++ = _sceneManager->getFogDensity();
+        *_passBufferPtr++ = _sceneManager->getFogStart();
+        *_passBufferPtr++ = _sceneManager->getFogEnd();
+        *_passBufferPtr++ = 1.0f / (_sceneManager->getFogEnd() - _sceneManager->getFogStart());
+
+        // fogColor
+        Ogre::ColourValue fogColor = _sceneManager->getFogColour();
+        *_passBufferPtr++ = fogColor.r;
+        *_passBufferPtr++ = fogColor.g;
+        *_passBufferPtr++ = fogColor.b;
+        *_passBufferPtr++ = fogColor.a;
+      }
+    }
+
     // Allow additional listener-only customizations to inject their stuff
     for (Ogre::HlmsListener *listener : this->customizations)
     {
@@ -359,6 +405,8 @@ namespace Ogre
       common::joinPaths("Hlms", "Gz", "SolidColor"));
     _outLibraryFoldersPaths.push_back(
       common::joinPaths("Hlms", "Gz", "SphericalClipMinDistance"));
+    _outLibraryFoldersPaths.push_back(
+      common::joinPaths("Hlms", "Gz", "Fog"));
     _outLibraryFoldersPaths.push_back(
       common::joinPaths("Hlms", "Terra", "gz"));
     _outLibraryFoldersPaths.push_back(

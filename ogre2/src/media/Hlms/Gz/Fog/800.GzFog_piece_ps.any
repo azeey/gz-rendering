@@ -1,0 +1,28 @@
+@piece( custom_ps_posExecution_fog )
+  @property( !hlms_shadowcaster && !hlms_render_depth_only && !gz_render_solid_color )
+    @property( gz_fog_enabled )
+      float depth = 0.0;
+      @property( hlms_vpos )
+        // Unlit fallback: use planar depth from gl_FragCoord.w
+        depth = 1.0 / gl_FragCoord.w;
+      @else
+        // PBS/Terra: use radial depth from view-space pos
+        depth = length(inPs.pos);
+      @end
+
+      float fogFactor = 0.0;
+      @property( gz_fog_linear )
+        fogFactor = (passBuf.fogParams.z - depth) * passBuf.fogParams.w;
+      @end
+      @property( gz_fog_exp )
+        fogFactor = exp(-depth * passBuf.fogParams.x);
+      @end
+      @property( gz_fog_exp2 )
+        fogFactor = exp(-depth * depth * passBuf.fogParams.x * passBuf.fogParams.x);
+      @end
+
+      fogFactor = clamp(fogFactor, 0.0, 1.0);
+      outPs_colour0.xyz = mix(passBuf.fogColor.xyz, outPs_colour0.xyz, fogFactor);
+    @end
+  @end
+@end

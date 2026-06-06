@@ -1,0 +1,6 @@
+@piece( custom_passBuffer_fog )
+  @property( gz_fog_enabled )
+    float4 fogParams;
+    float4 fogColor;
+  @end
+@end

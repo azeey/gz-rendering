@@ -21,6 +21,7 @@
 
 #include "gz/rendering/Camera.hh"
 #include "gz/rendering/Scene.hh"
+#include "gz/rendering/Fog.hh"
 
 #include <gz/utils/ExtraTestMacros.hh>
 
@@ -185,6 +186,51 @@ TEST_F(SceneTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(VisualAt))
   math::Vector2i emptyPosition(300, 150);
   VisualPtr empty_visual = scene->VisualAt(camera, emptyPosition);
   ASSERT_EQ(nullptr, empty_visual);
+
+  // Clean up
+  engine->DestroyScene(scene);
+}
+
+/////////////////////////////////////////////////
+TEST_F(SceneTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(Fog))
+{
+  ScenePtr scene = engine->CreateScene("scene");
+  ASSERT_NE(nullptr, scene);
+
+  auto fog = std::dynamic_pointer_cast<gz::rendering::Fog>(
+      scene->Extension()->CreateExt("fog"));
+
+  if (this->engineToTest == "ogre2")
+  {
+    ASSERT_NE(nullptr, fog);
+
+    // Test default values
+    EXPECT_EQ(FogMode::FOG_NONE, fog->Mode());
+    EXPECT_EQ(math::Color::White, fog->Color());
+    EXPECT_DOUBLE_EQ(1.0, fog->Density());
+    EXPECT_DOUBLE_EQ(0.0, fog->Start());
+    EXPECT_DOUBLE_EQ(0.0, fog->End());
+
+    // Test setters and getters
+    fog->SetMode(FogMode::FOG_LINEAR);
+    EXPECT_EQ(FogMode::FOG_LINEAR, fog->Mode());
+
+    fog->SetColor(math::Color::Red);
+    EXPECT_EQ(math::Color::Red, fog->Color());
+
+    fog->SetDensity(0.5);
+    EXPECT_DOUBLE_EQ(0.5, fog->Density());
+
+    fog->SetStart(10.0);
+    EXPECT_DOUBLE_EQ(10.0, fog->Start());
+
+    fog->SetEnd(100.0);
+    EXPECT_DOUBLE_EQ(100.0, fog->End());
+  }
+  else
+  {
+    EXPECT_EQ(nullptr, fog);
+  }
 
   // Clean up
   engine->DestroyScene(scene);
