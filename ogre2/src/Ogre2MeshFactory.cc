@@ -112,6 +112,11 @@ Ogre2MeshPtr Ogre2MeshFactory::Create(const MeshDescriptor &_desc)
     return nullptr;
   }
 
+  if (_desc.meshName == "unit_plane")
+  {
+    mesh->ogreItem->setCastShadows(false);
+  }
+
   // create sub-mesh store
   Ogre2SubMeshStoreFactory subMeshFactory(this->scene, mesh->ogreItem);
   mesh->subMeshes = subMeshFactory.Create();

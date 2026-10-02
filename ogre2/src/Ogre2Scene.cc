@@ -379,6 +379,23 @@ void Ogre2Scene::StartRendering(Ogre::Camera *_camera)
                "See Scene::SetCameraPassCountPerGpuFlush for details");
   }
 
+  Ogre::AxisAlignedBox castersBox =
+      this->ogreSceneManager->_calculateCurrentCastersBox(
+          Ogre::VisibilityFlags::RESERVED_VISIBILITY_FLAGS, 0u, 255u);
+  if (!castersBox.isNull() && !castersBox.isInfinite())
+  {
+    Ogre::Real halfExtent = std::max(castersBox.getHalfSize().length(),
+        static_cast<Ogre::Real>(0.5f));
+    Ogre::Real camDist = _camera ?
+        (_camera->getDerivedPosition() - castersBox.getCenter()).length() :
+        static_cast<Ogre::Real>(0.0f);
+    Ogre::Real shadowFarDist = std::clamp((camDist + halfExtent) * 1.5f,
+        static_cast<Ogre::Real>(5.0f), static_cast<Ogre::Real>(500.0f));
+    this->ogreSceneManager->setShadowDirectionalLightExtrusionDistance(
+        shadowFarDist);
+    this->ogreSceneManager->setShadowFarDistance(shadowFarDist);
+  }
+
 #if OGRE_VERSION_MAJOR != 2 || OGRE_VERSION_MINOR != 1
   // OgreNext 2.2+ has a feature where all textures are asynchronously loaded
   // by default; and a blank texture will be shown until it's ready.
@@ -658,12 +675,12 @@ void Ogre2Scene::UpdateShadowNode()
   // suggest that the number of uniform variables has exceeded the max number
   // allowed
   unsigned int maxShadowMaps = 25u;
-  if (dirLightCount * 3 + spotPointLightCount > maxShadowMaps)
+  if (dirLightCount * 4 + spotPointLightCount > maxShadowMaps)
   {
-    dirLightCount = std::min(static_cast<unsigned int>(maxShadowMaps / 3),
+    dirLightCount = std::min(static_cast<unsigned int>(maxShadowMaps / 4),
         dirLightCount);
     spotPointLightCount = std::min(
-        std::max(maxShadowMaps - dirLightCount * 3, 0u), spotPointLightCount);
+        std::max(maxShadowMaps - dirLightCount * 4, 0u), spotPointLightCount);
     gzwarn << "Number of shadow-casting lights exceeds the limit supported by "
             << "the underlying rendering engine ogre2. Limiting to "
             << dirLightCount << " directional lights and "
@@ -680,24 +697,27 @@ void Ogre2Scene::UpdateShadowNode()
   // directional lights
   unsigned int atlasId = 0u;
   unsigned int dirTexSize = this->dataPtr->dirTexSize;
-  unsigned int halfTexSize = static_cast<unsigned int>(dirTexSize * 0.5);
   for (unsigned int i = 0; i < dirLightCount; ++i)
   {
     shadowParam.technique = Ogre::SHADOWMAP_PSSM;
     shadowParam.atlasId = atlasId;
-    shadowParam.numPssmSplits = 3u;
+    shadowParam.numPssmSplits = 4u;
     shadowParam.resolution[0].x = dirTexSize;
     shadowParam.resolution[0].y = dirTexSize;
-    shadowParam.resolution[1].x = halfTexSize;
-    shadowParam.resolution[1].y = halfTexSize;
-    shadowParam.resolution[2].x = halfTexSize;
-    shadowParam.resolution[2].y = halfTexSize;
+    shadowParam.resolution[1].x = dirTexSize;
+    shadowParam.resolution[1].y = dirTexSize;
+    shadowParam.resolution[2].x = dirTexSize;
+    shadowParam.resolution[2].y = dirTexSize;
+    shadowParam.resolution[3].x = dirTexSize;
+    shadowParam.resolution[3].y = dirTexSize;
     shadowParam.atlasStart[0].x = 0u;
     shadowParam.atlasStart[0].y = 0u;
-    shadowParam.atlasStart[1].x = 0u;
-    shadowParam.atlasStart[1].y = dirTexSize;
-    shadowParam.atlasStart[2].x = halfTexSize;
+    shadowParam.atlasStart[1].x = dirTexSize;
+    shadowParam.atlasStart[1].y = 0u;
+    shadowParam.atlasStart[2].x = 0u;
     shadowParam.atlasStart[2].y = dirTexSize;
+    shadowParam.atlasStart[3].x = dirTexSize;
+    shadowParam.atlasStart[3].y = dirTexSize;
     shadowParam.supportedLightTypes = 0u;
     shadowParam.addLightType(Ogre::Light::LT_DIRECTIONAL);
     shadowParams.push_back(shadowParam);
@@ -770,8 +790,8 @@ void Ogre2Scene::CreateShadowNodeWithSettings(
 {
   GZ_PROFILE("Ogre2Scene::CreateShadowNodeWithSettings");
   Ogre::uint32 pointLightCubemapResolution = 1024u;
-  Ogre::Real pssmLambda = 0.95f;
-  Ogre::Real splitPadding = 1.0f;
+  Ogre::Real pssmLambda = 0.75f;
+  Ogre::Real splitPadding = 0.2f;
   Ogre::Real splitBlend = 0.125f;
   Ogre::Real splitFade = 0.313f;
 
@@ -857,7 +877,7 @@ void Ogre2Scene::CreateShadowNodeWithSettings(
       texDef->format = Ogre::PFG_D32_FLOAT;
       texDef->depthBufferId = Ogre::DepthBuffer::POOL_NON_SHAREABLE;
       texDef->depthBufferFormat = Ogre::PFG_D32_FLOAT;
-      texDef->preferDepthTexture = false;
+      texDef->preferDepthTexture = true;
       texDef->fsaa = "0";
       Ogre::RenderTargetViewDef *rtv =
         shadowNodeDef->addRenderTextureView(texName);
@@ -925,6 +945,10 @@ void Ogre2Scene::CreateShadowNodeWithSettings(
           shadowNodeDef->addShadowTextureDefinition(lightIdx, j, texName,
           uvOffset, uvLength, 0);
       shadowTexDef->shadowMapTechnique = shadowParam.technique;
+      shadowTexDef->xyPadding = 0.2f;
+      shadowTexDef->constantBiasScale = 0.1f;
+      shadowTexDef->normalOffsetBias = 5.0f;
+      shadowTexDef->autoConstantBiasScale = 0.5f;
       shadowTexDef->pssmLambda = pssmLambda;
       shadowTexDef->splitPadding = splitPadding;
       shadowTexDef->splitBlend = splitBlend;

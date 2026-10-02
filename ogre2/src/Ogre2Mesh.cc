@@ -380,8 +380,11 @@ void Ogre2SubMesh::SetMaterialImpl(MaterialPtr _material)
     }
   }
 
-  // set cast shadows
-  this->ogreSubItem->getParent()->setCastShadows(_material->CastShadows());
+  // set cast shadows (exclude planes so ground planes receive shadows without
+  // inflating the scene shadow-caster bounding box)
+  bool isPlane = this->dataPtr->subMeshName.rfind("unit_plane::", 0) == 0;
+  this->ogreSubItem->getParent()->setCastShadows(
+      _material->CastShadows() && !isPlane);
 }
 
 //////////////////////////////////////////////////
